@@ -1,0 +1,8 @@
+real[*] v = [1, 3.3, 5 * 3.4];
+v -> std_output;
+
+real[*] v1 = [7];
+v -> std_output;
+
+real[*] v2 = [];
+v -> std_output;
