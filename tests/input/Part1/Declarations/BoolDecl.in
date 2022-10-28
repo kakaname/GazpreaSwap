@@ -1,0 +1,2 @@
+var boolean bool;
+var boolean bool1 = true;
