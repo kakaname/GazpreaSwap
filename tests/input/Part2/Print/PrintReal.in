@@ -1,0 +1,2 @@
+var real v = 3.1415;
+v -> std_output;

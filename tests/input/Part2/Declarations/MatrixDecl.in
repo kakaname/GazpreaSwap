@@ -1,0 +1,10 @@
+integer[*, *] A = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+A -> std_output;
+integer[3, 2] B = [[1, 2], [4, 5], [7, 8]];
+B -> std_output;
+integer[3, *] C = [[1, 2], [4, 5], [7, 8]];
+C -> std_output;
+integer[*, 2] D = [[1, 2], [4, 5], [7, 8]];
+D -> std_output;
+integer[*, *] E = [[1, 2], [4, 5], [7, 8]];
+E -> std_output;
