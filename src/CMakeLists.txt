@@ -2,6 +2,14 @@
 set(
   gazprea_src_files
     "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Passes/PassManager.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Passes/PassManagerResource.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Passes/Pass.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Common/TestPasses.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Types/Type.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Types/ScalarTypes.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Types/CompositeTypes.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Types/TypeRegistry.cpp"
 )
 
 # Build our executable from the source files.
