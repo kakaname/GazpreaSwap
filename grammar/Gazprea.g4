@@ -5,118 +5,173 @@ tokens {
 }
 
 // --- PARSER RULES ---
-file: scope EOF;
+file: (global)* EOF;
 
-stm : stmBody SC ;
-block : OBRACE (stm)* CBRACE ;
-blStm : block | stmBody ;
+global
+    : identDecl
+    | functionDeclr
+    | functionDefinition
+    | procedureDeclr
+    | procedureDefinition;
 
-stmBody
-    : (qualtype | qualifier | type)
-      ID (EQ expr)?                 # Declaration
-    | lvalue EQ expr                # Assignment
-    | IF OPR expr CPR blStm
-      (ELSE IF OPR expr CPR blStm)*
-      (ELSE blStm)?                 # Conditional
-    | LOOP (WHILE stmBody)? blStm   # Loop
-    // TODO missing iterator loop for Part 1
-    | TYPEDEF type ID               # Typedef
-    | expr OUT STDOUT               # Output
-    | lvalue IN STDIN               # Input
-    | BREAK                         # Break
-    | CONTINUE                      # Continue
-    | RETURN expr?                  # Return
-    | funcDecl ( EQ expr | block)?  # FunctionDef
-    | prodDecl block?               # ProcedureDef
-    | prodCall                      # FunctionCall
-    | CALL prodCall                 # ProcedureCall
+stmt: simpleStmt | block; // Block should really be called compound statement.
+
+simpleStmt
+    : identDecl
+    | assignment
+    | conditional
+    | loop
+    | typeDef
+    | output
+    | input
+    | BREAK
+    | CONTINUE
+    | return
+    | functionDeclr
+    | functionDefinition
+    | procedureDeclr
+    | procedureDefinition
+    | procedureCall;
+
+identDecl
+    : typeQualifier (ID)? ID (EQ expr)? SC;
+
+assignment
+    : ID EQ (expr | procedureCall) SC;
+
+conditional
+    : IF expr stmt              # ifConditional
+    | IF expr stmt ELSE stmt    # ifElseConditional;
+
+loop
+    : LOOP stmt                 # infiniteLoop
+    | LOOP WHILE expr stmt      # whileLoop
+    | LOOP iterDomain stmt      # domainLoop;
+
+iterDomain
+    : ID GET expr;
+
+typeDef
+    : TYPEDEF ID ID SC;
+
+output
+    : expr PUT STDOUT SC;
+
+input
+    : ID IN STDIN SC;
+
+return
+    : RETURN expr SC;
+
+typeQualifier
+    : VAR
+    | CONST;
+
+type
+    : ID                                            #resolvedType
+    | tupleTypeDecl                                 #tupleType
+    | ID LSQRPAREN expressionOrWildcard RSQRPAREN   #vectorType
+    | ID LSQRPAREN expressionOrWildcard COMMA
+    expressionOrWildcard RSQRPAREN                  #matrixType
     ;
-prodCall : ID OPR (ID (COMMA ID)*)? CPR ;
-funcDecl : FUNCTION ID OPR (type ID (COMMA type ID)*)? CPR ;
-prodDecl : PROCEDURE ID OPR (qualtype ID (COMMA qualtype ID)*)? CPR ;
 
-qualtype : qualifier type;
+expressionOrWildcard:
+    (MUL | expr);
 
-scope : stm* ;
+tupleTypeDecl
+    : TUPLE LPAREN typeOptionalIdentPair COMMA typeOptionalIdentPair
+     (COMMA typeOptionalIdentPair)*;
 
+typeOptionalIdentPair
+    : type (ID)?;
+
+typeIdentPair
+    : type ID;
+
+functionDeclr
+    : FUNCTION funcName=ID LPAREN
+      (typeOptionalIdentPair (COMMA typeOptionalIdentPair)*)?
+      RPAREN RETURNS type;
+
+functionDefinition
+    : FUNCTION ID funcName=LPAREN
+      (typeIdentPair (COMMA typeIdentPair)*)?
+      RPAREN RETURNS type (block | EQ expr SC);
+
+procedureDeclr
+    : PROCEDURE procName=ID LPAREN
+      (typeOptionalIdentPair (COMMA typeOptionalIdentPair)*)? RPAREN (RETURNS type)?;
+
+procedureDefinition
+    : PROCEDURE procName=ID LPAREN
+    (typeIdentPair (COMMA typeIdentPair)*)? RPAREN (RETURNS type)? block;
+
+functionCall // Should be an expression.
+    : ID LPAREN (expr (COMMA expr)*)? RPAREN;
+
+procedureCall
+    : CALL ID LPAREN (expr (COMMA expr)*)? RPAREN;
+
+block : LBRACE (stmt)* RBRACE ;
+
+// TODO: Check precedence and add matrix, vector, int, real, string, tuple literals.
 expr
-    : expr DOT ID                   # DotExpr
-    | expr OBR expr CBR             # IndexExpr
-    | expr DD expr                  # RangeExpr
-    | OPR expr CPR                  # BracketExpr
-    |<assoc=right> NOT expr         # NotExpr
-    | expr EXP expr                 # ExpExpr
+    : expr PERIOD ID                        # memberAccess
+    | expr LSQRPAREN expr RSQRPAREN         # indexExpr
+    | expr DD expr (BY expr)?               # rangeExpr
+    | LPAREN expr RPAREN                    # bracketExpr
+    |<assoc=right> NOT expr                 # notExpr
+    | expr EXP expr                         # expExpr
     | expr ( MUL | DIV | MOD | SS)
-      expr                          # MulDivExpr
-    | expr ( ADD | SUB ) expr       # AddSubExpr
-    | expr BY expr                  # ByExpr
+      expr                                  # mulDivExpr // A better name perhaps
+    | expr ( ADD | SUB ) expr               # addSubExpr
+    | expr BY expr                          # byExpr
     | expr ( LT | GT | LTEQ | GTEQ )
-      expr                          # CompExpr
-    | expr ( EQEQ | NEQ ) expr      # EqualExpr
-    | expr AND expr                 # AndExpr
-    | expr (OR | XOR) expr          # OrExpr
-    | expr BB expr                  # BBExpr
-    | AS LT type GT OPR expr CPR    # AsExpr
-    | OBR ID INATOM expr BAR expr CBR   # GeneratorExpr
-    | OBR ID INATOM expr AND expr CBR   # FilterExpr
-    | atom                         # AtomExpr
+      expr                                  # compExpr
+    | expr ( EQEQ | NEQ ) expr              # equalExpr
+    | expr AND expr                         # andExpr
+    | expr (OR | XOR) expr                  # orExpr
+    | expr APPENDOP expr                    # appendOp
+    | AS LT type GT LPAREN expr RPAREN            # explicitCast
+    | LSQRPAREN ID IN expr BAR expr RSQRPAREN       # generatorExpr
+    | LSQRPAREN ID IN expr AND expr RSQRPAREN       # filterExpr
+    | functionCall                          # funcCall
+    | (TRUE | FALSE)                        # boolLiteral
+    | NULL                                  # nullLiteral
+    | IDENTITY                              # identityLiteral
     ;
 
-atom :
-    | INT
-    | ID
-    | TRUE
-    | FALSE
-    | char
-    | real
-    | NULL
-    | IDENTITY
-    ;
+realLiteral : fullRealLiteral | sciRealLiteral ;
 
-real : fullReal | sciReal ;
+sciRealLiteral
+    : fullRealLiteral 'e' (ADD | SUB)? INT;
 
-sciReal
-    : fullReal 'e' (ADD | SUB)? INT;
-
-fullReal
-    : INT DOT INT           # MainReal
-    | INT DOT               # IntReal
-    | DOT INT               # DotReal
+fullRealLiteral
+    : INT PERIOD INT           # MainReal
+    | INT PERIOD               # IntReal
+    | PERIOD INT               # DotReal
     ;
 
 char : QUOTE SChar QUOTE;
 
-lvalue : ID                         #ID
-
-    ;
-
-qualifier : CONST | VAR;
-
-type
-    : INATOM                            # InAtomType
-    | VECTOR                            # VectorType
-    | TUPLE OPR type (COMMA type)* CPR  # TupleType
-    ;
-
-
 // --- LEXER RULES ---
 
 // Characters ++
-OPR : '(' ;
-CPR : ')' ;
-OBR : '[' ;
-CBR : ']' ;
-OBRACE : '{' ;
-CBRACE : '}' ;
+LPAREN : '(' ;
+RPAREN : ')' ;
+LSQRPAREN : '[' ;
+RSQRPAREN : ']' ;
+LBRACE : '{' ;
+RBRACE : '}' ;
 BAR : '|' ;
-BB : '||' ;
+APPENDOP : '||' ;
 SC : ';' ;
 EQ : '=' ;
 DD : '..' ;
-DOT: '.' ;
+PERIOD: '.' ;
 AND : '&' ;
-OUT : '->' ;
-IN : '<-' ;
+PUT : '->' ;
+GET : '<-' ;
 QUOTE : '\'' ;
 COMMA : ',' ;
 
@@ -138,7 +193,7 @@ MOD : '%' ;
 // Reserved
 IF : 'if' ;
 LOOP : 'loop' ;
-INATOM : 'in' ;
+IN : 'in' ;
 VECTOR : 'vector' ;
 ANDATOM : 'and' ;
 AS : 'as' ;

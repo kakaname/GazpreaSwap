@@ -5,248 +5,221 @@
 #ifndef GAZPREABASE_ASTNODES_H
 #define GAZPREABASE_ASTNODES_H
 
+#include "Common/TreeNode.h"
 
-class ASTNode {
-public:
-    enum ASTNodeKind {
-        N_Program,
-        N_Identifier,
-        N_Assignment,
-        N_Declaration,
-        N_Block,
-        N_LogicalOp,
-        N_ArithmeticOp,
-        N_Index,
-        N_Loop,
-        N_IntLiteral,
-        N_NullLiteral,
-        N_IdentityLiteral,
-        N_RealLiteral,
-        N_BoolLiteral,
-        N_CharLiteral,
-        N_Tuple,
-        N_TupleAccess,
-        N_TupleDecl,
-        N_Conditional,
-        N_Cast,
-        N_BitwiseOp,
-        N_UnaryOp,
-        N_FunctionDecl,
-        N_FunctionCall,
-        N_ProcedureDecl,
-        N_ProcedureCall,
-        N_Return,
-        N_Break,
-        N_Continue
-    };
+using ASTNodeT = TreeNode;
 
-    ASTNodeKind getKind() const {
-        return Kind;
+class Program: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Program;
     }
-private:
-    ASTNodeKind Kind;
+
+    Program() : TreeNode(TreeNodeKind::N_AST_Program) {}
 };
 
 
-class Program: ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Program;
+class Identifier: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Identifier;
     }
+
+    Identifier() : TreeNode(TreeNodeKind::N_AST_Identifier) {}
 };
 
 
-class Identifier: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Identifier;
+class Assignment: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Assignment;
     }
+
+    Assignment() : TreeNode(TreeNodeKind::N_AST_Assignment) {};
 };
 
 
-class Assignment: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Assignment;
+class Declaration: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Declaration;
     }
+
+    Declaration() : TreeNode(TreeNodeKind::N_AST_Declaration) {}
 };
 
 
-class Declaration: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Declaration;
+class Block: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Block;
+    }
+
+    Block() : TreeNode(TreeNodeKind::N_AST_Block) {}
+};
+
+
+class LogicalOp: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_LogicalOp;
+    }
+
+    LogicalOp() : TreeNode(TreeNodeKind::N_AST_LogicalOp) {}
+};
+
+
+class ArithmeticOp: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_ArithmeticOp;
     }
 };
 
 
-class Block: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Block;
+class Index: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Index;
     }
 };
 
 
-class LogicalOp: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_LogicalOp;
+class Loop: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Loop;
     }
 };
 
 
-class ArithmeticOp: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_ArithmeticOp;
+class IntLiteral: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_IntLiteral;
     }
 };
 
 
-class Index: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Index;
+class NullLiteral: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_NullLiteral;
     }
 };
 
 
-class Loop: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Loop;
+class IdentityLiteral: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_IdentityLiteral;
     }
 };
 
 
-class IntLiteral: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_IntLiteral;
+class RealLiteral: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_RealLiteral;
     }
 };
 
 
-class NullLiteral: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_NullLiteral;
+class BoolLiteral: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_BoolLiteral;
     }
 };
 
 
-class IdentityLiteral: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_IdentityLiteral;
+class CharLiteral: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_CharLiteral;
     }
 };
 
 
-class RealLiteral: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_RealLiteral;
+class Tuple: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Tuple;
     }
 };
 
 
-class BoolLiteral: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_BoolLiteral;
+class TupleAccess: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_TupleAccess;
     }
 };
 
 
-class CharLiteral: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_CharLiteral;
+class TupleDecl: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_TupleDecl;
     }
 };
 
 
-class Tuple: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Tuple;
+class Conditional: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Conditional;
     }
 };
 
 
-class TupleAccess: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_TupleAccess;
+class Cast: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Cast;
     }
 };
 
 
-class TupleDecl: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_TupleDecl;
+class BitwiseOp: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_BitwiseOp;
     }
 };
 
 
-class Conditional: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Conditional;
+class UnaryOp: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_UnaryOp;
     }
 };
 
 
-class Cast: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Cast;
+class FunctionDecl: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_FunctionDecl;
     }
 };
 
 
-class BitwiseOp: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_BitwiseOp;
+class FunctionCall: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_FunctionCall;
     }
 };
 
 
-class UnaryOp: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_UnaryOp;
+class ProcedureDecl: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_ProcedureDecl;
     }
 };
 
 
-class FunctionDecl: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_FunctionDecl;
+class ProcedureCall: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_ProcedureCall;
     }
 };
 
 
-class FunctionCall: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_FunctionCall;
+class Return: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Return;
     }
 };
 
 
-class ProcedureDecl: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_ProcedureDecl;
+class Break: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Break;
     }
 };
 
 
-class ProcedureCall: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_ProcedureCall;
-    }
-};
-
-
-class Return: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Return;
-    }
-};
-
-
-class Break: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Break;
-    }
-};
-
-
-class Continue: public ASTNode {
-    static bool classof(const ASTNode *N) {
-        return N->getKind() == ASTNodeKind::N_Continue;
+class Continue: public TreeNode {
+    static bool classof(const TreeNode *N) {
+        return N->getKind() == TreeNodeKind::N_AST_Continue;
     }
 };
 
