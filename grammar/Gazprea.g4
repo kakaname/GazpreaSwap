@@ -117,7 +117,7 @@ block : LBRACE (stmt)* RBRACE ;
 // TODO: Check precedence and add matrix literals, vector literals,
 //  real literals, string literals, tuple literals.
 expr
-    : expr PERIOD (ID | INTLITERAL)         # memberAccess
+    : ID PERIOD (ID | INTLITERAL)           # memberAccess
     | expr LSQRPAREN expr RSQRPAREN         # indexExpr
     | expr DD expr (BY expr)?               # rangeExpr
     | LPAREN expr RPAREN                    # bracketExpr
@@ -142,17 +142,18 @@ expr
     | IDENTITY                              # identityLiteral
     | ID                                    # identifier
     | INTLITERAL                            # intLiteral
+    | realLit                               # realLiteral
     ;
 
-realLiteral : fullRealLiteral | sciRealLiteral ;
+realLit : fullRealLiteral | sciRealLiteral ;
 
 sciRealLiteral
-    : fullRealLiteral 'e' (ADD | SUB)? INT;
+    : fullRealLiteral 'e' (ADD | SUB)? INTLITERAL;
 
 fullRealLiteral
-    : INT PERIOD INT           # MainReal
-    | INT PERIOD               # IntReal
-    | PERIOD INT               # DotReal
+    : INTLITERAL PERIOD INTLITERAL           # MainReal
+    | INTLITERAL PERIOD               # IntReal
+    | PERIOD INTLITERAL               # DotReal
     ;
 
 char : QUOTE SChar QUOTE;
