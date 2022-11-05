@@ -116,11 +116,12 @@ block : LBRACE (stmt)* RBRACE ;
 
 // TODO: Check precedence and add matrix literals, vector literals,
 //  real literals, string literals, tuple literals.
-expr
-    : expr PERIOD (ID | INTLITERAL)         # memberAccess
+
+// 1. promote bracketExpr to the highest priority
+expr: LPAREN expr RPAREN                    # bracketExpr
+    | expr PERIOD (ID | INTLITERAL)         # memberAccess
     | expr LSQRPAREN expr RSQRPAREN         # indexExpr
     | expr DD expr (BY expr)?               # rangeExpr
-    | LPAREN expr RPAREN                    # bracketExpr
     | <assoc=right> op=(ADD | SUB | NOT) expr                 # notExpr
     | expr EXP expr                         # expExpr
     | expr ( MUL | DIV | MOD | SS)
