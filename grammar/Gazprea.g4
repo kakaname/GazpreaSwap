@@ -34,7 +34,7 @@ simpleStmt
     | procedureCall;
 
 identDecl
-    : typeQualifier (ID)? ID (EQ expr)? SC;
+    : (typeQualifier)? (type)? ID (EQ expr)? SC;
 
 assignment
     : ID EQ (expr | procedureCall) SC;
@@ -91,7 +91,7 @@ typeIdentPair
 functionDeclr
     : FUNCTION funcName=ID LPAREN
       (typeOptionalIdentPair (COMMA typeOptionalIdentPair)*)?
-      RPAREN RETURNS type;
+      RPAREN RETURNS type SC;
 
 functionDefinition
     : FUNCTION ID funcName=LPAREN
@@ -114,9 +114,10 @@ procedureCall
 
 block : LBRACE (stmt)* RBRACE ;
 
-// TODO: Check precedence and add matrix, vector, int, real, string, tuple literals.
+// TODO: Check precedence and add matrix literals, vector literals,
+//  real literals, string literals, tuple literals.
 expr
-    : expr PERIOD ID                        # memberAccess
+    : expr PERIOD (ID | INTLITERAL)         # memberAccess
     | expr LSQRPAREN expr RSQRPAREN         # indexExpr
     | expr DD expr (BY expr)?               # rangeExpr
     | LPAREN expr RPAREN                    # bracketExpr
@@ -139,6 +140,8 @@ expr
     | (TRUE | FALSE)                        # boolLiteral
     | NULL                                  # nullLiteral
     | IDENTITY                              # identityLiteral
+    | ID                                    # identifier
+    | INTLITERAL                            # intLiteral
     ;
 
 realLiteral : fullRealLiteral | sciRealLiteral ;
@@ -194,10 +197,8 @@ MOD : '%' ;
 IF : 'if' ;
 LOOP : 'loop' ;
 IN : 'in' ;
-VECTOR : 'vector' ;
 ANDATOM : 'and' ;
 AS : 'as' ;
-BOOLEANATOM : 'boolean' ;
 ELSE : 'else' ;
 BREAK : 'break' ;
 CONTINUE : 'continue' ;
@@ -210,7 +211,6 @@ FALSE : 'false' ;
 TRUE : 'true' ;
 FUNCTION : 'function' ;
 IDENTITY : 'identity' ;
-INTEGERATOM : 'integer' ;
 INTERVAL : 'interval' ;
 LENGTH : 'length' ;
 NOT : 'not' ;
@@ -233,13 +233,14 @@ XOR : 'xor' ;
 
 
 // Customs
-INT : [0-9]+ ;
+INTLITERAL : [0-9]+ ;
 ID : [_a-zA-Z] [_a-zA-Z0-9]* ;
 
-SChar
-    :   EscapeSequence
-    // TODO check if works
-    |   ~["\\\r\n]
+SChar:
+//    :   EscapeSequence
+//     TODO check if works
+//    |   ~["\\\r\n]
+    'scar'
     ;
 
  fragment
