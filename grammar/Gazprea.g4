@@ -120,7 +120,7 @@ expr
     | expr LSQRPAREN expr RSQRPAREN         # indexExpr
     | expr DD expr (BY expr)?               # rangeExpr
     | LPAREN expr RPAREN                    # bracketExpr
-    |<assoc=right> NOT expr                 # notExpr
+    | <assoc=right> op=(ADD | SUB | NOT) expr                 # notExpr
     | expr EXP expr                         # expExpr
     | expr ( MUL | DIV | MOD | SS)
       expr                                  # mulDivExpr // A better name perhaps
