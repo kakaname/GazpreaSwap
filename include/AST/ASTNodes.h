@@ -9,8 +9,35 @@
 class ASTNode {
 public:
     enum ASTNodeKind {
+        N_Program,
         N_Identifier,
-        N_Declaration
+        N_Assignment,
+        N_Declaration,
+        N_Block,
+        N_LogicalOp,
+        N_ArithmeticOp,
+        N_Index,
+        N_Loop,
+        N_IntLiteral,
+        N_NullLiteral,
+        N_IdentityLiteral,
+        N_RealLiteral,
+        N_BoolLiteral,
+        N_CharLiteral,
+        N_Tuple,
+        N_TupleAccess,
+        N_TupleDecl,
+        N_Conditional,
+        N_Cast,
+        N_BitwiseOp,
+        N_UnaryOp,
+        N_FunctionDecl,
+        N_FunctionCall,
+        N_ProcedureDecl,
+        N_ProcedureCall,
+        N_Return,
+        N_Break,
+        N_Continue
     };
 
     ASTNodeKind getKind() const {
@@ -162,7 +189,7 @@ class Break: public ASTNode {
 
 
 class Continue: public ASTNode {
-    
+
 };
 
 #endif //GAZPREABASE_ASTNODES_H
