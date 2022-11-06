@@ -2,8 +2,6 @@
 // Created by dhanrajbir on 28/10/22.
 //
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "LoopDoesntUseConditionVariableInspection"
 #ifndef GAZPREABASE_TREENODE_H
 #define GAZPREABASE_TREENODE_H
 
