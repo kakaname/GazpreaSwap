@@ -138,7 +138,7 @@ expr
     | LSQRPAREN ID IN expr AND expr RSQRPAREN       # filterExpr
     | functionCall                          # funcCall
     | (TRUE | FALSE)                        # boolLiteral
-    | NULL                                  # nullLiteral
+    | NULL_                                 # nullLiteral
     | IDENTITY                              # identityLiteral
     | ID                                    # identifier
     | INTLITERAL                            # intLiteral
@@ -215,7 +215,7 @@ IDENTITY : 'identity' ;
 INTERVAL : 'interval' ;
 LENGTH : 'length' ;
 NOT : 'not' ;
-NULL : 'null' ;
+NULL_ : 'null' ;
 OR : 'or' ;
 PROCEDURE : 'procedure' ;
 REALATOM : 'real' ;
