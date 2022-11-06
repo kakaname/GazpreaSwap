@@ -71,13 +71,12 @@ using std::set;
 // this infrastructure.
 class ASTPassManager {
 
-    using NodeIdPassIdPair = pair<unsigned, const PassId*>;
-    using AnnotationMapT = map<NodeIdPassIdPair , unique_ptr<ResultObject>>;
+    using NodePassIdPair = pair<TreeNode*, const PassId*>;
+    using AnnotationMapT = map<NodePassIdPair , unique_ptr<ResultObject>>;
     using PassIDToIdxMapT = map<const PassId*, size_t>;
     using ResultMapT = map<const PassId*, unique_ptr<ResultObject>>;
     using ResourceMapT = map<const ResourceId*, unique_ptr<ResultObject>>;
 
-    shared_ptr<ASTNodeT> Root;
     AnnotationMapT Annotations;
     ResultMapT Results;
     ResourceMapT Resources;
@@ -86,10 +85,11 @@ class ASTPassManager {
 
     vector<PassObject> Passes;
 
+    ASTNodeT *Root;
 public:
     TreeNodeBuilder Builder;
     ASTPassManager() : Builder() {
-        Root = Builder.build<ASTNodeT>();
+        Root = Builder.build<Program>();
     };
 
     // NOTE: The following three methods need to be in the header file for the
@@ -129,8 +129,8 @@ public:
     }
 
     template<class PassT>
-    typename PassT::AnnotationT &getAnnotation(ASTNodeT &Node) {
-        std::pair<unsigned, const PassId*> Key(Node.getID(), PassT::ID());
+    typename PassT::AnnotationT &getAnnotation(ASTNodeT *Node) {
+        std::pair<ASTNodeT*, const PassId*> Key(Node, PassT::ID());
         auto Res = Annotations.find(Key);
 
         assert(Res != Annotations.end() && "Attempt to access annotations from"
@@ -141,10 +141,10 @@ public:
     }
 
     template<typename PassT>
-    void setAnnotation(ASTNodeT &Node, typename PassT::AnnotationT Annotation) {
+    void setAnnotation(ASTNodeT *Node, typename PassT::AnnotationT Annotation) {
         // Ensure we are not setting a reference as an annotation.
         static_assert(!std::is_reference_v<decltype(Annotation)>);
-        std::pair Key(Node.getID(), PassT::ID());
+        std::pair Key(Node, PassT::ID());
         Annotations[Key] = make_unique<ResultObject>(
                 std::forward<typename PassT::AnnotationT>(Annotation));
     }
@@ -198,7 +198,7 @@ public:
     }
 
     ASTNodeT *getRoot() {
-        return Root.get();
+        return Root;
     }
 };
 
