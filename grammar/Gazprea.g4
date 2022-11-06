@@ -184,7 +184,7 @@ ID : [_a-zA-Z] [_a-zA-Z0-9]* ;
 SChar
     :   EscapeSequence
     // TODO check if works
-    |   ~["\\\r\n]
+    |  ID 
     ;
 
  fragment
