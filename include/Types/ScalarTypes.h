@@ -45,7 +45,7 @@ struct RealTy : public Type {
 
 struct CharTy : public Type {
     static bool classof(const Type *T) {
-        return T->getKind() == TypeKind::T_Real;
+        return T->getKind() == TypeKind::T_Char;
     }
 
     CharTy() = delete;

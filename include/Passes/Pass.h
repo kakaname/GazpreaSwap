@@ -47,7 +47,7 @@ class PassObject {
 
 public:
     template<typename T>
-    PassObject(T &&P) : Pass(make_unique<PassModelT<T>>(PassModelT<T>(std::forward<T>(P)))) {};
+    PassObject(T &&P) : Pass(make_unique<PassModelT<T>>(PassModelT<T>(P))) {};
 
     void runOnAST(ASTPassManager &PM, ASTNodeT &Root)  {
         Pass->runOnAST(PM, Root);
@@ -77,8 +77,8 @@ class ResultObject {
     unique_ptr<ResultConceptT> Self;
 
 public:
-    template<typename R>
-    ResultObject(R Res) : Self(make_unique<ResultModelT<R>>(ResultModelT<R>(std::forward<R>(Res)))) {};
+    template<typename R, typename = std::enable_if_t<!std::is_reference_v<R>>>
+    ResultObject(R Res) : Self(make_unique<ResultModelT<R>>(ResultModelT<R>(Res))) {};
 
     ResultObject() = delete;
 

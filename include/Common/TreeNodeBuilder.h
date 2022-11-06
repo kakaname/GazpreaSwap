@@ -27,7 +27,9 @@ class TreeNodeBuilder {
 
         template<typename NodeT, typename = std::enable_if_t<!std::is_reference_v<NodeT>>>
         struct TreeNodeModel : TreeNodeConcept {
-            TreeNodeModel(NodeT Node) : Node(Node) {}
+            TreeNodeModel(NodeT N) : Node(N) {
+                static_assert(!std::is_reference_v<decltype(N)>);
+            }
 
             NodeT Node;
 
