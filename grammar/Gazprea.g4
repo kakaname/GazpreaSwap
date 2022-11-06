@@ -146,6 +146,7 @@ expr: LPAREN expr RPAREN                    # bracketExpr
     | ID                                    # identifier
     | INTLITERAL                            # intLiteral
     | realLit                               # realLiteral
+    | LPAREN expr COMMA expr (COMMA expr)* RPAREN #tupleLiteral
     ;
 
 realLit : fullRealLiteral | sciRealLiteral ;
