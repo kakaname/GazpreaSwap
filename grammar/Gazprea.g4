@@ -69,7 +69,7 @@ atom :
     | FALSE
     | character
     | real
-    | NULL
+    | NULLSTRING
     | IDENTITY
     ;
 
@@ -159,7 +159,7 @@ INTEGERATOM : 'integer' ;
 INTERVAL : 'interval' ;
 LENGTH : 'length' ;
 NOT : 'not' ;
-NULL : 'null' ;
+NULLSTRING : 'null' ; // bug
 OR : 'or' ;
 PROCEDURE : 'procedure' ;
 REALATOM : 'real' ;
