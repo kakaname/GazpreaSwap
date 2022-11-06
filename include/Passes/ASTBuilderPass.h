@@ -14,7 +14,7 @@ class ASTBuilderPass: public gazprea::GazpreaBaseVisitor {
 
     Program *Prog;
 
-    std::any visitFile(gazprea::GazpreaParser::FileContext *ctx) override;
+    std::any visitFile(GazpreaParser::FileContext *ctx) override;
 
     std::any visitIdentDecl(gazprea::GazpreaParser::IdentDeclContext *ctx) override;
 
