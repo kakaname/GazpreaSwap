@@ -141,6 +141,10 @@ struct FunctionTy : public Type {
         return Args.at(Pos);
     }
 
+    size_t getNumOfArgs() {
+        return Args.size();
+    }
+
     FunctionTy() = delete;
 
     explicit FunctionTy(ArgsTypeContainer &&Args) :
