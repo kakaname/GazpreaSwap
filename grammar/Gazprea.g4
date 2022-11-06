@@ -222,7 +222,6 @@ NOT : 'not' ;
 NULL : 'null' ;
 OR : 'or' ;
 PROCEDURE : 'procedure' ;
-REALATOM : 'real' ;
 RETURN : 'return' ;
 RETURNS : 'returns' ;
 REVERSE : 'reverse' ;
