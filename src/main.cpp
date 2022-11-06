@@ -57,6 +57,8 @@ int main(int argc, char **argv) {
 
     auto *V = dyn_cast<VectorTy>(T);
     std::cout << V->isConst() << std::endl;
+    TreeNodeBuilder Builder;
+    Builder.build<Assignment>();
 //  ASTPassManager Manager;
 //  Manager.registerAnonymousPass(HelloWorldPass());
 //  Manager.registerPass(SetsMessage());
