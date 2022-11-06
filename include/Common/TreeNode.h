@@ -99,5 +99,3 @@ private:
 
 
 #endif //GAZPREABASE_TREENODE_H
-
-#pragma clang diagnostic pop

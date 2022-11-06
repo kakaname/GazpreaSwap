@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "google-explicit-constructor"
 //
 // Created by dhanrajbir on 28/10/22.
 //
@@ -106,5 +104,3 @@ private:
 };
 
 #endif //GAZPREABASE_PASS_H
-
-#pragma clang diagnostic pop

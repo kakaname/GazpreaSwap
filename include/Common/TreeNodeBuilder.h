@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "google-explicit-constructor"
 //
 // Created by dhanrajbir on 28/10/22.
 //
@@ -80,5 +78,3 @@ public:
 
 
 #endif //GAZPREABASE_TREENODEBUILDER_H
-
-#pragma clang diagnostic pop
