@@ -116,24 +116,27 @@ block : LBRACE (stmt)* RBRACE ;
 
 // TODO: Check precedence and add matrix literals, vector literals,
 //  real literals, string literals, tuple literals.
-expr
-    : ID PERIOD (ID | INTLITERAL)           # memberAccess
+
+// 1. promote bracketExpr to the highest priority
+// 2. change notExpr to unaryExpr
+// 3. expExpr should be right-associative
+// 4. appendOp should be right-associative
+
+expr: LPAREN expr RPAREN                    # bracketExpr
+    | ID PERIOD (ID | INTLITERAL)           # memberAccess
     | expr LSQRPAREN expr RSQRPAREN         # indexExpr
     | expr DD expr (BY expr)?               # rangeExpr
-    | LPAREN expr RPAREN                    # bracketExpr
-    |<assoc=right> NOT expr                 # notExpr
-    | expr EXP expr                         # expExpr
-    | expr ( MUL | DIV | MOD | SS)
-      expr                                  # mulDivExpr // A better name perhaps
-    | expr ( ADD | SUB ) expr               # addSubExpr
+    | <assoc=right> op=(ADD | SUB | NOT) expr      # unaryExpr
+    | <assoc=right> expr EXP expr           # expExpr
+    | expr op=(MUL | DIV | MOD | SS) expr     # mulDivExpr // A better name perhaps
+    | expr op=(ADD | SUB) expr              # addSubExpr
     | expr BY expr                          # byExpr
-    | expr ( LT | GT | LTEQ | GTEQ )
-      expr                                  # compExpr
-    | expr ( EQEQ | NEQ ) expr              # equalExpr
+    | expr op=(LT | GT | LTEQ | GTEQ) expr  # compExpr
+    | expr op=(EQEQ | NEQ) expr             # equalExpr
     | expr AND expr                         # andExpr
-    | expr (OR | XOR) expr                  # orExpr
-    | expr APPENDOP expr                    # appendOp
-    | AS LT type GT LPAREN expr RPAREN            # explicitCast
+    | expr op=(OR | XOR) expr               # orExpr
+    | <assoc=right> expr APPENDOP expr      # appendOp
+    | AS LT type GT LPAREN expr RPAREN      # explicitCast
     | LSQRPAREN ID IN expr BAR expr RSQRPAREN       # generatorExpr
     | LSQRPAREN ID IN expr AND expr RSQRPAREN       # filterExpr
     | functionCall                          # funcCall
@@ -143,6 +146,7 @@ expr
     | ID                                    # identifier
     | INTLITERAL                            # intLiteral
     | realLit                               # realLiteral
+    | LPAREN expr COMMA expr (COMMA expr)* RPAREN #tupleLiteral
     ;
 
 realLit : fullRealLiteral | sciRealLiteral ;
@@ -218,7 +222,6 @@ NOT : 'not' ;
 NULL_ : 'null' ;
 OR : 'or' ;
 PROCEDURE : 'procedure' ;
-REALATOM : 'real' ;
 RETURN : 'return' ;
 RETURNS : 'returns' ;
 REVERSE : 'reverse' ;
