@@ -67,7 +67,7 @@ public:
     }
 
     ASTNodeT *getExpr() {
-        getChildAt(ExprChildIdx);
+        return getChildAt(ExprChildIdx);
     }
 
     Assignment() : TreeNode(TreeNodeKind::N_AST_Assignment) {};
