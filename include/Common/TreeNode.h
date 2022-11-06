@@ -69,6 +69,12 @@ public:
         return Parent;
     }
 
+    void addChild(TreeNode *Child) {
+        if (Child)
+            Child->setParent(this);
+        Children.emplace_back(Child);
+    }
+
 protected:
     ChildrenContainerT Children;
 
@@ -78,10 +84,12 @@ protected:
 
     template<typename T>
     T *getChildAtAs(size_t Pos) {
-        return cast<T*>(Children.at(Pos));
+        return cast<T>(Children.at(Pos));
     }
 
     void setChildAt(long Pos, TreeNode *Child) {
+        if (Child)
+            Child->setParent(this);
         Children.insert(Children.begin() + Pos, Child);
     }
 

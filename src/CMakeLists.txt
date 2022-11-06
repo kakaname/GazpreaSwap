@@ -5,6 +5,7 @@ set(
     "${CMAKE_CURRENT_SOURCE_DIR}/Passes/PassManager.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Passes/PassManagerResource.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Passes/Pass.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Passes/ASTBuilderPass.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Common/TestPasses.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Types/Type.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Types/ScalarTypes.cpp"

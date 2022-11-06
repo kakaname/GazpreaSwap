@@ -5,42 +5,113 @@
 #ifndef GAZPREABASE_ASTNODES_H
 #define GAZPREABASE_ASTNODES_H
 
+#include "string"
+
 #include "Common/TreeNode.h"
+
+using std::string;
 
 using ASTNodeT = TreeNode;
 
 class Program: public TreeNode {
+
+public:
     static bool classof(const TreeNode *N) {
         return N->getKind() == TreeNodeKind::N_AST_Program;
     }
 
-public:
     Program() : TreeNode(TreeNodeKind::N_AST_Program) {}
 };
 
 
 class Identifier: public TreeNode {
+    string IdentName;
+
+public:
     static bool classof(const TreeNode *N) {
         return N->getKind() == TreeNodeKind::N_AST_Identifier;
     }
 
     Identifier() : TreeNode(TreeNodeKind::N_AST_Identifier) {}
+
+    void setName(const string &N) {
+        IdentName = N;
+    }
+
+    const string &getName() {
+        return IdentName;
+    }
 };
 
 
 class Assignment: public TreeNode {
+
+    static constexpr size_t IdentChildIdx = 0;
+    static constexpr size_t ExprChildIdx = 1;
+
+public:
     static bool classof(const TreeNode *N) {
         return N->getKind() == TreeNodeKind::N_AST_Assignment;
     }
 
-public:
+    void setIdentifier(Identifier *Ident) {
+        setChildAt(IdentChildIdx, Ident);
+    }
+
+    Identifier *getIdentifier() {
+        return getChildAtAs<Identifier>(IdentChildIdx);
+    }
+
+    void setExpr(ASTNodeT *Expr) {
+        setChildAt(ExprChildIdx, Expr);
+    }
+
+    ASTNodeT *getExpr() {
+        getChildAt(ExprChildIdx);
+    }
+
     Assignment() : TreeNode(TreeNodeKind::N_AST_Assignment) {};
 };
 
 
 class Declaration: public TreeNode {
+    static constexpr size_t IdentTypeIdx = 0;
+    static constexpr size_t IdentIdx = 1;
+    static constexpr size_t InitExprIdx = 2;
+
+    bool IsConst{false};
+
+public:
     static bool classof(const TreeNode *N) {
         return N->getKind() == TreeNodeKind::N_AST_Declaration;
+    }
+
+    void setIdentTypeNode(ASTNodeT *N) {
+        setChildAt(IdentTypeIdx, N);
+    }
+
+    void setIdent(Identifier *Ident) {
+        setChildAt(IdentIdx, Ident);
+    }
+
+    void setInitExpr(ASTNodeT *Expr) {
+        setChildAt(InitExprIdx, Expr);
+    }
+
+    ASTNodeT *getIdentTypeNode() {
+        return getChildAt(IdentTypeIdx);
+    }
+
+    Identifier *getIdentifier() {
+        return getChildAtAs<Identifier>(IdentIdx);
+    }
+
+    ASTNodeT *getInitExpr() {
+        return getChildAt(InitExprIdx);
+    }
+
+    void setConst() {
+        IsConst = true;
     }
 
     Declaration() : TreeNode(TreeNodeKind::N_AST_Declaration) {}

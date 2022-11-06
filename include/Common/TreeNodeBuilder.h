@@ -69,6 +69,13 @@ public:
         return Res->getPointerToNode();
     }
 
+    template<typename NodeT,
+            typename = std::enable_if_t<std::is_base_of_v<TreeNode, NodeT>>>
+    NodeT *build(TreeNode *Parent) {
+        NodeT *N = build<NodeT>();
+        N->setParent(Parent);
+    }
+
 };
 
 
