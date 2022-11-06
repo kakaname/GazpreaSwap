@@ -25,7 +25,7 @@ stmBody
     | lvalue IN STDIN               # Input
     | BREAK                         # Break
     | CONTINUE                      # Continue
-    | RETURN expr?                  # Return
+    //| RETURN expr?                  # Return
     | funcDecl ( EQ expr | block)?  # FunctionDef
     | prodDecl block?               # ProcedureDef
     | prodCall                      # FunctionCall
@@ -67,7 +67,7 @@ atom :
     | ID
     | TRUE
     | FALSE
-    | char
+    | character
     | real
     | NULL
     | IDENTITY
@@ -84,7 +84,7 @@ fullReal
     | DOT INT               # DotReal
     ;
 
-char : QUOTE SChar QUOTE;
+character : QUOTE 'a' QUOTE;
 
 lvalue : ID                         #ID
 
@@ -184,7 +184,7 @@ ID : [_a-zA-Z] [_a-zA-Z0-9]* ;
 SChar
     :   EscapeSequence
     // TODO check if works
-    |  ID 
+    |  ID
     ;
 
  fragment
